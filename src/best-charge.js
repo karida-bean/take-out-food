@@ -6,10 +6,10 @@ function bestCharge(selectedItems) {
 
   function getItemCount(tags){
     let itemCounts =  tags.map(function(tag){
-      let exist = tag.split('x');
+      let exist = tag.split(' x ');
       return{
-        id:tag[0],
-        count:tag[1]
+        id:exist[0],
+        count:parseInt(exist[1])
       }
     });
     return itemCounts;
@@ -17,8 +17,8 @@ function bestCharge(selectedItems) {
 
   function getCartItemCount(itemCounts){
     let cartItemCounts = itemCounts.reduce(function(cur,old){
-      let exist = cur.find(function(old){
-        return exist.id === old.id;
+      let exist = cur.find(function(item){
+        return item.id === old.id;
       })
       if(exist){
         exist.count += old.count;
@@ -30,7 +30,7 @@ function bestCharge(selectedItems) {
     return cartItemCounts;
   }
 
-  function getcartItems(cartItemCount,allItems){
+  function getCartItems(cartItemCount,allItems){
     let cartItems = [];
     for(let i = 0; i<cartItemCount.length; i++){
       for(let j = 0; j<allItems.length; j++){
@@ -42,9 +42,11 @@ function bestCharge(selectedItems) {
     return cartItems;
   }
 
-  function getcartItemPromotion(cartItems,promotion){
-    let promotionTypes = cartItems;
-    promotionTypes.push(Object.assign({},{type:"满30减6元"}))
+  function getCartItemPromotion(cartItems,promotion){
+    let promotionTypes = [];
+    for(let m = 0; m<cartItems.length; m++) {
+      promotionTypes.push(Object.assign({},cartItems[m],{type: "满30减6元"}))
+    }
     for(let i = 0;i<promotion.length; i++){
       let exist = promotion[i].items
       if(exist){
@@ -60,14 +62,14 @@ function bestCharge(selectedItems) {
     return promotionTypes;
   }
 
-  function calculatePromotionMoney(promotionTypes){
+  function getPromotionMoney(promotionTypes){
     let promotionMoneys = [];
     let proMoney = 0;
     for(let i = 0; i<promotionTypes.length; i++){
       if(promotionTypes[i].type === "指定菜品半价"){
-        proMoney = parseFloat(promotionTypes[i].price / 2)*count;
+        proMoney = parseFloat(promotionTypes[i].price / 2)* promotionTypes[i].count;
       }
-      promotionMoneys[i].push(Object.assign({},promotionTypes[i],{promotion:proMony}))
+      promotionMoneys.push(Object.assign({},promotionTypes[i],{promotion:proMoney}))
     }
     return promotionMoneys;
   }
