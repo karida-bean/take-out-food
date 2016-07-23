@@ -48,12 +48,12 @@ function bestCharge(selectedItems) {
       promotionTypes.push(Object.assign({},cartItems[m],{type: "满30减6元"}))
     }
     for(let i = 0;i<promotion.length; i++){
-      let exist = promotion[i].items
+      let exist = promotion[i].items;
       if(exist){
         for(let j = 0; j<exist.length; j++){
           for(let n = 0; n<promotionTypes.length; n++){
             if(exist[j] === promotionTypes[n].id){
-              promotionTypes[n].type = "指定菜品半价"
+              promotionTypes[n].type = "指定菜品半价";
             }
           }
         }
@@ -67,8 +67,11 @@ function bestCharge(selectedItems) {
     let proMoney = 0;
     for(let i = 0; i<promotionTypes.length; i++){
       if(promotionTypes[i].type === "指定菜品半价"){
-        proMoney = parseFloat(promotionTypes[i].price / 2)* promotionTypes[i].count;
+        proMoney = parseFloat(promotionTypes[i].price / 2)*promotionTypes[i].count;
+      }else{
+        proMoney = promotionTypes[i].price * promotionTypes[i].count;
       }
+
       promotionMoneys.push(Object.assign({},promotionTypes[i],{promotion:proMoney}))
     }
     return promotionMoneys;
@@ -77,8 +80,8 @@ function bestCharge(selectedItems) {
   function calculateSubtotal(promotionMoneys){
     let subTotals = [];
     for(let i = 0; i<promotionMoneys.length; i++){
-      let subMoney = promotionMoneys[i].price * promotionMoneys[i].count;
-      subTotals.push(Object.assign({},promotionMoneys[i],{subTotal:subMoney}));
+      let subMoneys = promotionMoneys[i].price * promotionMoneys[i].count;
+      subTotals.push(Object.assign({},promotionMoneys[i],{subTotal:subMoneys}));
     }
     return subTotals;
   }
@@ -88,12 +91,13 @@ function bestCharge(selectedItems) {
     let proSubTotals = [];
     for (let i = 0; i < subTotals.length; i++) {
       if (subTotals[i].type === "指定菜品半价") {
-        sub = subTotals[i].subTotal - subTotals[i].promotion;
+        sub = subTotals[i].promotion;
       } else {
-        sub = subTotals[i].subTotal
+        sub = subTotals[i].subTotal;
       }
-      proSubTotals.push(Object.assign({}, {subMoney: sub}))
+      proSubTotals.push(Object.assign({},subTotals[i], {subMoney: sub}))
     }
+    return proSubTotals;
   }
 
 function calculateTotal(proSubTotals) {
@@ -101,13 +105,13 @@ function calculateTotal(proSubTotals) {
   let total2 = 0;
   let total = 0;
   for (let i = 0; i < proSubTotals.length; i++) {
-    total1 += proSubTotals[i].subMoney;
+    total1 += proSubTotals[i].promotion;
   }
   for(let j = 0; j<proSubTotals.length; j++){
     total2 += proSubTotals[j].subTotal;
-    if(total2 > 30){
-      total2 -= 6;
-    }
+  }
+  if(total2 > 30){
+    total2  = total2 - 6;
   }
   if(total1<total2){
     total = total1;
@@ -120,7 +124,7 @@ function calculateTotal(proSubTotals) {
 function calculateProTotal(proSubTotals,total){
   let money = 0;
   for(let i = 0; i<proSubTotals.length; i++){
-    money = proSubTotals[i].price * proSubTotals[i].count;
+    money += proSubTotals[i].price * proSubTotals[i].count;
   }
   let proMoneys = (money - total);
   return proMoneys;
