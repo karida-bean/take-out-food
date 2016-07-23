@@ -129,5 +129,3 @@ function calculateProTotal(proSubTotals,total){
   let proMoneys = (money - total);
   return proMoneys;
 }
-
-
