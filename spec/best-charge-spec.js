@@ -119,10 +119,95 @@ describe("getPromotionMoney",function() {
       price: 18.00,
       count: 3,
       type: '满30减6元',
-      promotion: 0
+      promotion: 54
     }, {id: 'ITEM0022', name: '凉皮', price: 8.00, count: 1, type: '指定菜品半价', promotion: 4}];
     expect(promotionMoneys).toEqual(expected)
   });
 })
 
+describe("calculateSubTotal",function(){
+  it("should calculate subTotal",function(){
+    let inputs = [{
+      id: 'ITEM0001',
+      name: '黄焖鸡',
+      price: 18.00,
+      count: 3,
+      type: '满30减6元',
+      promotion: 0
+    }, {id: 'ITEM0022', name: '凉皮', price: 8.00, count: 1, type: '指定菜品半价', promotion: 4}];
+    let subTotals = calculateSubtotal(inputs);
+    let expected = [{
+      id: 'ITEM0001',
+      name: '黄焖鸡',
+      price: 18.00,
+      count: 3,
+      type: '满30减6元',
+      promotion: 0,
+      subTotal:54
+    }, {id: 'ITEM0022', name: '凉皮', price: 8.00, count: 1, type: '指定菜品半价', promotion: 4,subTotal:8}];
+    expect(subTotals).toEqual(expected)
+  })
+})
 
+describe("",function(){
+  it("should ",function(){
+    let inputs = [{
+      id: 'ITEM0001',
+      name: '黄焖鸡',
+      price: 18.00,
+      count: 3,
+      type: '满30减6元',
+      promotion: 0,
+      subTotal:54,
+    }, {id: 'ITEM0022', name: '凉皮', price: 8.00, count: 1, type: '指定菜品半价', promotion: 4,subTotal:8}];
+    let proSubTotals = calculateProSubTotal(inputs);
+    let expected = [{
+      id: 'ITEM0001',
+      name: '黄焖鸡',
+      price: 18.00,
+      count: 3,
+      type: '满30减6元',
+      promotion: 0,
+      subTotal:54,
+      subMoney:54
+    }, {id: 'ITEM0022', name: '凉皮', price: 8.00, count: 1, type: '指定菜品半价', promotion: 4,subTotal:8,subMoney:4}];
+    expect(proSubTotals).toEqual(expected)
+  })
+})
+
+describe("",function(){
+  it("should ",function(){
+    let inputs = [{
+      id: 'ITEM0001',
+      name: '黄焖鸡',
+      price: 18.00,
+      count: 3,
+      type: '满30减6元',
+      promotion: 54,
+      subTotal:54,
+      subMoney:54
+    }, {id: 'ITEM0022', name: '凉皮', price: 8.00, count: 1, type: '指定菜品半价', promotion: 4,subTotal:8,subMoney:4}];
+    let total = calculateTotal(inputs);
+    let expected = 56;
+    expect(total).toEqual(expected)
+  })
+})
+
+describe("",function(){
+  it("should ",function(){
+    let inputs1 = [{
+      id: 'ITEM0001',
+      name: '黄焖鸡',
+      price: 18.00,
+      count: 3,
+      type: '满30减6元',
+      promotion: 0,
+      subTotal:54,
+      subMoney:54
+    }, {id: 'ITEM0022', name: '凉皮', price: 8.00, count: 1, type: '指定菜品半价', promotion: 4,subTotal:8,subMoney:4}];
+    let inputs2 = 56;
+    let proMoneys = calculateProTotal(inputs1,inputs2);
+    let expected = 6;
+    expect(proMoneys).toEqual(expected)
+  })
+})
